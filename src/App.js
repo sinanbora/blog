@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 //styles
 import './App.css'
 //pages and components
@@ -9,33 +9,46 @@ import Signup from './pages/signup/Signup'
 import Project from './pages/project/Project'
 import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar';
+import OnlineUsers from './components/OnlineUsers';
+
+import { useAuthContext } from './hooks/useAuthContext'
 
 function App() {
+
+	const { user, authIsReady } = useAuthContext();
 	return (
 		<div className="App">
-			<BrowserRouter>
-				<Sidebar></Sidebar>
-				<div className='container'>
-					<Navbar></Navbar>
-					<Switch>
-						<Route exact path='/'>
-							<Dashboard></Dashboard>
-						</Route>
-						<Route path='/create'>
-							<Create></Create>
-						</Route>
-						<Route path='/login'>
-							<Login></Login>
-						</Route>
-						<Route path='/signup'>
-							<Signup></Signup>
-						</Route>
-						<Route path='/project/:id'>
-							<Project></Project>
-						</Route>
-					</Switch>
-				</div>
-			</BrowserRouter>
+			{authIsReady && (
+				<BrowserRouter>
+					{user && <Sidebar/>}
+					<div className='container'>
+						<Navbar></Navbar>
+						<Switch>
+							<Route exact path='/'>
+								{user && <Dashboard/>}
+								{!user && <Redirect to="login"/>}
+							</Route>
+							<Route path='/create'>
+								{user && <Create/>}
+								{!user && <Redirect to="login"/>}
+							</Route>
+							<Route path='/login'>
+								{!user && <Login/>}
+								{user && <Redirect to="/"/>}
+							</Route>
+							<Route path='/signup'>
+								{!user && <Signup/>}
+								{user && <Redirect to="/"/>}
+							</Route>
+							<Route path='/project/:id'>
+								{user && <Project/>}
+								{!user && <Redirect to="login"/>}
+							</Route>
+						</Switch>
+					</div>
+					{user && <OnlineUsers />}
+				</BrowserRouter>
+			)}
 
 		</div>
 	);
