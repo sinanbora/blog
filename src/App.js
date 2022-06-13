@@ -40,7 +40,7 @@ function App() {
 								{!user && <Signup/>}
 								{user && <Redirect to="/"/>}
 							</Route>
-							<Route path='/project/:id'>
+							<Route path='/projects/:id'>
 								{user && <Project/>}
 								{!user && <Redirect to="login"/>}
 							</Route>

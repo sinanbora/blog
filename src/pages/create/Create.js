@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
 import Select from 'react-select';
+import { timestamp } from '../../firebase/config';
 import { useCollection } from '../../hooks/useCollection'
-import { Editor } from "@tinymce/tinymce-react";
+import { useAuthContext } from '../../hooks/useAuthContext'
+import { useFirestore } from '../../hooks/useFirestore';
 
 import './Create.css'
+import { useHistory } from 'react-router-dom';
 
 const categories = [
 	{ value: "hayat", label: "Hayat" },
@@ -13,6 +16,13 @@ const categories = [
 ]
 
 export default function Create() {
+
+	const { documents } = useCollection('users');
+	const [ users, setUsers ] = useState([]); 
+	const { user } = useAuthContext();
+	const { addDocument, response } = useFirestore('blogs');
+	const history = useHistory();
+
 	const [name, setName ] = useState(''); 
 	const [details, setDetails] = useState('');
 	const [dueDate, setDueDate ] = useState(''); 
@@ -20,8 +30,7 @@ export default function Create() {
 	const [assignedUsers, setAssignedUsers ] = useState([]);
 	const [formError, setFormError] = useState('')
 
-	const { documents } = useCollection('users');
-	const [ users, setUsers ] = useState([]); 
+	
 
 	useEffect(()=>{
 		if(documents){
@@ -32,7 +41,7 @@ export default function Create() {
 		}
 	},[documents])
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault()
 
 		setFormError(null)
@@ -44,7 +53,35 @@ export default function Create() {
 			setFormError("Lütfen en az 1 kullanıcı seçiniz!")
 			return
 		}
-		console.log(name,details,dueDate,category.value,assignedUsers)
+
+		const createdBy = {
+			displayName:user.displayName,
+			photoURL:user.photoURL,
+			id:user.uid
+		}
+
+		const assignedUsersList = assignedUsers.map((u)=>{
+			return {
+				displayName:u.value.displayName,
+				photoURL:u.value.photoURL,
+				id:u.value.id
+			}
+		})
+		const project = {
+			name,
+			details,
+			dueDate: timestamp.fromDate(new Date(dueDate)),
+			category:category.value,
+			comments: [],
+			createdBy,
+			assignedUsersList
+		}
+
+		await addDocument(project)
+
+		if (!response.error) {
+			history.push('/')
+		}
 	}
 
 	return (
