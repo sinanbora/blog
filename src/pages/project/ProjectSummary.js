@@ -1,5 +1,5 @@
 import Avatar from "../../components/Avatar";
-
+import parse from 'html-react-parser';
 
 export default function ProjectSummary({ project }) {
   return (
@@ -9,7 +9,9 @@ export default function ProjectSummary({ project }) {
             Tarih: {project.dueDate.toDate().toLocaleDateString("tr-TR")}
         </p>
         <p className="details">
-            {project.details}
+            <div className="ck-content">
+                {parse(project.details)}
+            </div>
         </p>
         <h4>Kişiler :</h4>
         <div className="assigned-users">

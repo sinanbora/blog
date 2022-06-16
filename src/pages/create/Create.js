@@ -4,15 +4,18 @@ import { timestamp } from '../../firebase/config';
 import { useCollection } from '../../hooks/useCollection'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { useFirestore } from '../../hooks/useFirestore';
-
-import './Create.css'
 import { useHistory } from 'react-router-dom';
+import './Create.css'
+
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import InlineEditor from '@ckeditor/ckeditor5-build-inline';
 
 const categories = [
 	{ value: "hayat", label: "Hayat" },
 	{ value: "gezi", label: "Gezi" },
 	{ value: "eğlence", label: "Eğlence" },
 	{ value: "can", label: "Can" },
+	{ value: "bilgisayar", label: "Bilgisayar"}
 ]
 
 export default function Create() {
@@ -24,14 +27,18 @@ export default function Create() {
 	const history = useHistory();
 
 	const [name, setName ] = useState(''); 
-	const [details, setDetails] = useState('');
 	const [dueDate, setDueDate ] = useState(''); 
 	const [category, setCategory ] = useState(''); 
 	const [assignedUsers, setAssignedUsers ] = useState([]);
 	const [formError, setFormError] = useState('')
-
 	
+	const [details, setDetails] = useState('');
 
+	const inputHandler = (event, editor) => {
+        const data = editor.getData();
+		setDetails(data)
+    };
+	
 	useEffect(()=>{
 		if(documents){
 			const options = documents.map((user)=>{
@@ -41,7 +48,8 @@ export default function Create() {
 		}
 	},[documents])
 
-	const handleSubmit = async (e) => {
+	const handleSubmit = async (e ,values) => {
+		
 		e.preventDefault()
 
 		setFormError(null)
@@ -84,6 +92,8 @@ export default function Create() {
 		}
 	}
 
+	
+
 	return (
 		<div className='create-form'>
 			<h2 className='page-title'>Yeni blog oluştur</h2>
@@ -99,11 +109,17 @@ export default function Create() {
 				</label>
 				<label>
 					<span>Blog Detay:</span>
-					<textarea 
+					{/* <textarea 
 						required
 						onChange={(e) => setDetails(e.target.value)}
 						value={details} 
-					></textarea>
+					></textarea> */}
+						<CKEditor style={{"background-color:#FFF"}}   
+							editor={InlineEditor}
+							data={details}
+							onChange={inputHandler}
+						/>
+					
 				</label>
 				<label>
 					<span>Olay Tarihi:</span>
