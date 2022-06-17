@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom';
 import './Create.css'
 
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-import InlineEditor from '@ckeditor/ckeditor5-build-inline';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const categories = [
 	{ value: "hayat", label: "Hayat" },
@@ -114,8 +114,8 @@ export default function Create() {
 						onChange={(e) => setDetails(e.target.value)}
 						value={details} 
 					></textarea> */}
-						<CKEditor style={{"background-color:#FFF"}}   
-							editor={InlineEditor}
+						<CKEditor    
+							editor={ClassicEditor}
 							data={details}
 							onChange={inputHandler}
 						/>
