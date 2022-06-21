@@ -6,7 +6,7 @@ import Avatar from './Avatar'
 export default function BlogList({ blogs }) {
   return (
     <div className='project-list'>
-        {blogs.lenght === 0 && <p className=''>Henüz hiç yazı yok.</p>}
+        {blogs.length === 0 && <p className=''>Henüz hiç yazı yok.</p>}
         {blogs.map(blog => (
             <Link to={`/projects/${blog.id}`} key={blog.id}>
                 <h4>{blog.name}</h4>

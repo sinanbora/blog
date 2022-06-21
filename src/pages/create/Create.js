@@ -8,14 +8,16 @@ import { useHistory } from 'react-router-dom';
 import './Create.css'
 
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import InlineEditor from '@ckeditor/ckeditor5-build-inline';
+
 
 const categories = [
 	{ value: "hayat", label: "Hayat" },
 	{ value: "gezi", label: "Gezi" },
 	{ value: "eğlence", label: "Eğlence" },
 	{ value: "can", label: "Can" },
-	{ value: "bilgisayar", label: "Bilgisayar"}
+	{ value: "iş", label: "İş"}
 ]
 
 export default function Create() {
@@ -31,7 +33,6 @@ export default function Create() {
 	const [category, setCategory ] = useState(''); 
 	const [assignedUsers, setAssignedUsers ] = useState([]);
 	const [formError, setFormError] = useState('')
-	
 	const [details, setDetails] = useState('');
 
 	const inputHandler = (event, editor) => {
@@ -45,6 +46,7 @@ export default function Create() {
 				return { value:user, label: user.displayName }
 			})
 			setUsers(options)
+			
 		}
 	},[documents])
 
@@ -107,18 +109,19 @@ export default function Create() {
 						value={name}
 					/>
 				</label>
-				<label>
+				<label >
 					<span>Blog Detay:</span>
 					{/* <textarea 
 						required
 						onChange={(e) => setDetails(e.target.value)}
 						value={details} 
 					></textarea> */}
-						<CKEditor    
-							editor={ClassicEditor}
-							data={details}
-							onChange={inputHandler}
-						/>
+					<CKEditor    
+						editor={InlineEditor}
+						data={details}
+						onChange={inputHandler}
+					/>
+					
 					
 				</label>
 				<label>
