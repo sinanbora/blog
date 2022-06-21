@@ -10,6 +10,7 @@ import Project from './pages/project/Project'
 import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar';
 import OnlineUsers from './components/OnlineUsers';
+import ThemeSelector from './components/ThemeSelector'
 
 import { useAuthContext } from './hooks/useAuthContext'
 
@@ -22,6 +23,7 @@ function App() {
 				<BrowserRouter>
 					{user && <Sidebar/>}
 					<div className='container'>
+						<ThemeSelector></ThemeSelector>
 						<Navbar></Navbar>
 						<Switch>
 							<Route exact path='/'>

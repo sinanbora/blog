@@ -6,12 +6,14 @@ import Avatar from './Avatar'
 
 import { NavLink } from 'react-router-dom'
 import { useAuthContext } from '../hooks/useAuthContext'
+import { useTheme } from '../hooks/useTheme'
 
 export default function Sidebar() {
     const { user } = useAuthContext();
+    const { color } = useTheme();
 
     return (
-        <div className='sidebar'>
+        <div className='sidebar' style={{background:color}}>
             <div className='sidebar-content'>
                 <div className='user'>
                     <Avatar src={user.photoURL}/>
